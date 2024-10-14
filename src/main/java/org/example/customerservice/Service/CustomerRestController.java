@@ -1,28 +1,30 @@
-package org.example.customerservice.Service;
+    package org.example.customerservice.Service;
 
-import org.example.customerservice.Dao.Entities.Customer;
-import org.example.customerservice.Dao.Repositories.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+    import org.example.customerservice.Dao.Entities.Customer;
+    import org.example.customerservice.Dao.Repositories.CustomerRepository;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+    import java.util.List;
 
-@RestController
-@RequestMapping("/api/customers")
-public class CustomerRestController {
-    @Autowired
-    private CustomerRepository customerRepository;
+    @RestController
+        @RequestMapping("/api/customers")
+    public class CustomerRestController {
+        @Autowired
+        private CustomerRepository customerRepository;
 
-    public List<Customer> customerList(){
-        return customerRepository.findAll();
+        @GetMapping
+        public List<Customer> customerList(){
+            return customerRepository.findAll();
+        }
+
+        @GetMapping("/{id}")
+        public Customer customerById(@PathVariable Long id){
+            return customerRepository.findById(id).orElse(null);
+        }
+
+        @PostMapping
+        public Customer saveCustomer(@RequestBody Customer customer){
+            return customerRepository.save(customer);
+        }
     }
-
-    public Customer customerById(Long id){
-        return customerRepository.findById(id).orElseThrow();
-    }
-
-    public Customer saveCustomer(Customer customer){
-        return customerRepository.save(customer);
-    }
-}
